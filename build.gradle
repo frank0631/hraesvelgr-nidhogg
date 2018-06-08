@@ -1,0 +1,72 @@
+import groovy.json.*
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url "http://dl.bintray.com/esistegalaber/maven/" }
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath 'org.jruyi.gradle:thrift-gradle-plugin:+'
+        classpath 'org.absolutegalaber:yeoman-gradle-plugin:0.3.0'
+        classpath "com.eriwen:gradle-js-plugin:1.12.1"
+        classpath 'com.eriwen:gradle-css-plugin:1.8.0'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.jruyi.thrift'
+
+//Thrift settings
+compileThrift {
+	recurse true
+	thriftExecutable "thrift"
+	sourceDir "src/main/thrift"
+
+    generator 'html'
+	generator 'java'
+	generator 'js'
+	generator 'py'
+}
+
+//Java settings
+group = 'com.frank0631'
+archivesBaseName = 'nidhogg'
+version = '1.0'
+sourceCompatibility = 1.8
+
+repositories {
+  jcenter()
+}
+
+dependencies {
+    compile 'org.apache.thrift:libthrift:0.11.0'
+}
+
+
+//Maven Settings
+
+apply plugin: 'maven-publish'
+
+publishing {
+    repositories {
+        maven {
+            url myMavenRepoWriteUrl
+            credentials {
+                username 'myMavenRepo'
+                password myMavenRepoWritePassword
+            }
+        }
+    }
+
+    publications {
+        maven(MavenPublication) {
+            groupId group
+            artifactId archivesBaseName
+            version project.version
+            from components.java
+        }
+    }
+}
+
