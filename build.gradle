@@ -25,7 +25,7 @@ compileThrift {
 	sourceDir "src/main/thrift"
 
     generator 'html'
-	generator 'java'
+	generator 'java', 'private-members'
 	generator 'js'
 	generator 'py'
 }

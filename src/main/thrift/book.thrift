@@ -1,8 +1,8 @@
 namespace java com.frank0631.nidhogg.book
 
 enum BookFormat {
-    ELECTRONIC,
-    HARDCOVER,
+    ELECTRONIC
+    HARDCOVER
     PAPERBACK
 }
 
