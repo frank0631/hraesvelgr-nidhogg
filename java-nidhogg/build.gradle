@@ -30,22 +30,25 @@ archivesBaseName = 'nidhogg'
 version = '1.0'
 sourceCompatibility = 1.8
 
-compileJava{
-    dependsOn rootProject.copyThriftJava
-}
+compileJava.dependsOn rootProject.copyThriftJava
 
 clean.doFirst {
     delete "gen-java"
 }
 
 //Maven Settings
+
+def _archivaURL = hasProperty('archivaURL') ? archivaURL : System.getenv('archivaURL')
+def _archivaUser = hasProperty('archivaUser') ? archivaUser : System.getenv('archivaUser')
+def _archivaPassword = hasProperty('archivaPassword') ? archivaPassword : System.getenv('archivaPassword')
+
 publishing {
     repositories {
         maven {
-            url archivaURL
+            url _archivaURL
             credentials {
-                username archivaUser
-                password archivaPassword
+                username _archivaUser
+                password _archivaPassword
             }
         }
     }

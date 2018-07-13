@@ -1,5 +1,3 @@
-import groovy.json.JsonSlurper
-
 buildscript {
     repositories {
         maven {url "https://plugins.gradle.org/m2/"}
@@ -17,9 +15,13 @@ node {
     download = true
 }
 
+def _verdaccioURL = hasProperty('verdaccioURL') ? verdaccioURL : System.getenv('verdaccioURL')
+def _verdaccioUser = hasProperty('verdaccioUser') ? archivaUser : System.getenv('verdaccioUser')
+def _verdaccioPassword = hasProperty('verdaccioPassword') ? verdaccioPassword : System.getenv('verdaccioPassword')
+
 tasks.npmInstall.dependsOn(rootProject.copyThriftJavaScript)
 
-task helloWorld( type: NodeTask, dependsOn: npmInstall) {
+task test( type: NodeTask, dependsOn: npmInstall) {
     script = file( 'test.js' )
 }
 
@@ -27,9 +29,9 @@ task login {
 	doLast {
 		def login = ['curl',
 		'-H', 'Accept: application/json', 
-		'--user', "${verdaccioUser}:${verdaccioPassword}",
-		'-X', 'PUT', '--data', "'{\"name\": \"${verdaccioUser}\", \"password\": \"${verdaccioPassword}\"}'", 
-		"${verdaccioURL}/-/user/org.couchdb.user:${verdaccioUser}"
+		'--user', "${_verdaccioUser}:${_verdaccioPassword}",
+		'-X', 'PUT', '--data', "'{\"name\": \"${_verdaccioUser}\", \"password\": \"${_verdaccioPassword}\"}'", 
+		"${_verdaccioURL}/-/user/org.couchdb.user:${_verdaccioUser}"
 		].execute()
 		
 		login.waitFor()
@@ -38,7 +40,7 @@ task login {
 }
 
 task publish(type: NpmTask, dependsOn: [npmInstall, login] ) {
-	args = ['publish', '--registry', verdaccioURL, '--force']
+	args = ['publish', '--registry', _verdaccioURL, '--force']
 }
 
 task clean {
