@@ -15,7 +15,6 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
 apply plugin: 'org.jruyi.thrift'
 
 //Thrift settings
@@ -26,47 +25,25 @@ compileThrift {
 
     generator 'html'
 	generator 'java', 'private-members'
-	generator 'js'
+	generator 'js:node'
 	generator 'py'
 }
 
-//Java settings
-group = 'com.frank0631'
-archivesBaseName = 'nidhogg'
-version = '1.0'
-sourceCompatibility = 1.8
 
-repositories {
-  jcenter()
+task copyThriftJava(type: Copy) {
+	from 'build/generated-sources/thrift/gen-java'
+	into "${project(':java-nidhogg').projectDir}/gen-java"
 }
+copyThriftJava.dependsOn(compileThrift)
 
-dependencies {
-    compile 'org.apache.thrift:libthrift:0.11.0'
+
+task copyThriftJavaScript(type: Copy) {
+	from 'build/generated-sources/thrift/gen-nodejs'
+	into "${project(':node-nidhogg').projectDir}/gen-nodejs"
 }
+copyThriftJavaScript.dependsOn(compileThrift)
 
 
-//Maven Settings
-
-apply plugin: 'maven-publish'
-
-publishing {
-    repositories {
-        maven {
-            url myMavenRepoWriteUrl
-            credentials {
-                username 'myMavenRepo'
-                password myMavenRepoWritePassword
-            }
-        }
-    }
-
-    publications {
-        maven(MavenPublication) {
-            groupId group
-            artifactId archivesBaseName
-            version project.version
-            from components.java
-        }
-    }
+task clean << {
+    delete 'build'
 }
-

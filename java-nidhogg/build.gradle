@@ -1,0 +1,61 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+
+//Java settings
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['gen-java']
+        }
+    }
+}
+
+repositories {
+  jcenter()
+}
+
+dependencies {
+    compile 'org.apache.thrift:libthrift:0.11.0'
+}
+
+group = 'com.frank0631'
+archivesBaseName = 'nidhogg'
+version = '1.0'
+sourceCompatibility = 1.8
+
+compileJava{
+    dependsOn rootProject.copyThriftJava
+}
+
+clean.doFirst {
+    delete "gen-java"
+}
+
+//Maven Settings
+publishing {
+    repositories {
+        maven {
+            url archivaURL
+            credentials {
+                username archivaUser
+                password archivaPassword
+            }
+        }
+    }
+
+    publications {
+        maven(MavenPublication) {
+            groupId group
+            artifactId archivesBaseName
+            version project.version
+            from components.java
+        }
+    }
+}

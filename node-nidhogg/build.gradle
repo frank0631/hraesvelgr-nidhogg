@@ -1,0 +1,47 @@
+import groovy.json.JsonSlurper
+
+buildscript {
+    repositories {
+        maven {url "https://plugins.gradle.org/m2/"}
+    }
+
+    dependencies {
+        classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
+    }
+}
+
+apply plugin: 'com.moowork.node'
+
+node {
+    version = '6.11.0'
+    download = true
+}
+
+tasks.npmInstall.dependsOn(rootProject.copyThriftJavaScript)
+
+task helloWorld( type: NodeTask, dependsOn: npmInstall) {
+    script = file( 'test.js' )
+}
+
+task login {
+	doLast {
+		def login = ['curl',
+		'-H', 'Accept: application/json', 
+		'--user', "${verdaccioUser}:${verdaccioPassword}",
+		'-X', 'PUT', '--data', "'{\"name\": \"${verdaccioUser}\", \"password\": \"${verdaccioPassword}\"}'", 
+		"${verdaccioURL}/-/user/org.couchdb.user:${verdaccioUser}"
+		].execute()
+		
+		login.waitFor()
+		println login.text
+    }
+}
+
+task publish(type: NpmTask, dependsOn: [npmInstall, login] ) {
+	args = ['publish', '--registry', verdaccioURL, '--force']
+}
+
+task clean {
+    delete "gen-nodejs"
+    delete "node_modules"
+}

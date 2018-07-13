@@ -1,0 +1,28 @@
+{
+  "name": "nidhogg-node",
+  "version": "0.0.1",
+  "description": "thrift nidhogg example",
+  "main": "test.js",
+  "scripts": {
+    "start": "node test.js"
+  },
+  "dependencies": {
+    "thrift": "^0.11.0"
+  },
+  "engines": {
+    "node": "4.2.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/frank0631/hraesvelgr-nidhogg"
+  },
+  "keywords": [
+    "node",
+    "thrift"
+  ],
+  "author": "frank0631",
+  "contributors": [
+    "frank0631 <frank0631@gmail.com>"
+  ],
+  "license": "MIT"
+}

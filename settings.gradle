@@ -1,0 +1,4 @@
+rootProject.name = 'nidhogg'
+
+include 'java-nidhogg'
+include 'node-nidhogg'
