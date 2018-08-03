@@ -26,6 +26,7 @@ compileThrift {
     generator 'html'
 	generator 'java', 'private-members'
 	generator 'js:node'
+	generator 'js:jquery'
 	generator 'py'
 }
 
@@ -37,12 +38,17 @@ task copyThriftJava(type: Copy) {
 copyThriftJava.dependsOn(compileThrift)
 
 
-task copyThriftJavaScript(type: Copy) {
+task copyThriftNode(type: Copy) {
 	from 'build/generated-sources/thrift/gen-nodejs'
 	into "${project(':node-nidhogg').projectDir}/gen-nodejs"
 }
-copyThriftJavaScript.dependsOn(compileThrift)
+copyThriftNode.dependsOn(compileThrift)
 
+task copyThriftJquery(type: Copy) {
+	from 'build/generated-sources/thrift/gen-js'
+	into "${project(':jquery-nidhogg').projectDir}/gen-js"
+}
+copyThriftJquery.dependsOn(compileThrift)
 
 task clean << {
     delete 'build'

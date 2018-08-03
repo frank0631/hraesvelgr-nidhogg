@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Hello Thrift</title>
+  </head>
+  <body>
+    Name: <input type="text" id="name_in">
+    <input type="button" id="get_msg" value="Get Message" >
+    <div id="output"></div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="thrift.js"></script>
+    <script src="gen-js/TEchoService.js"></script>
+    <script>
+      (function() {
+        var transport = new Thrift.TXHRTransport("http://hraesvelgr.frank0631.com:9000/thrift/echo");
+        var protocol  = new Thrift.TJSONProtocol(transport);
+        var client    = new TEchoServiceClient(protocol);
+        var nameElement = document.getElementById("name_in");
+        var outputElement = document.getElementById("output");
+        document.getElementById("get_msg")
+          .addEventListener("click", function(){
+            client.echo(nameElement.value, function(result) {
+              outputElement.innerHTML = result;
+            });
+          });
+      })();
+    </script>
+  </body>
+</html>

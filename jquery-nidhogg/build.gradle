@@ -19,7 +19,7 @@ def _verdaccioURL = hasProperty('verdaccioURL') ? verdaccioURL : System.getenv('
 def _verdaccioUser = hasProperty('verdaccioUser') ? archivaUser : System.getenv('verdaccioUser')
 def _verdaccioPassword = hasProperty('verdaccioPassword') ? verdaccioPassword : System.getenv('verdaccioPassword')
 
-tasks.npmInstall.dependsOn(rootProject.copyThriftNode)
+tasks.npmInstall.dependsOn(rootProject.copyThriftJquery)
 
 task test( type: NodeTask, dependsOn: npmInstall) {
     script = file( 'test.js' )
@@ -44,6 +44,6 @@ task publish(type: NpmTask, dependsOn: [npmInstall, login] ) {
 }
 
 task clean {
-    delete "gen-nodejs"
+    delete "gen-js"
     delete "node_modules"
 }

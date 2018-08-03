@@ -2,3 +2,4 @@ rootProject.name = 'nidhogg'
 
 include 'java-nidhogg'
 include 'node-nidhogg'
+include 'jquery-nidhogg'
