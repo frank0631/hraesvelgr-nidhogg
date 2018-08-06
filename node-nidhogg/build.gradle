@@ -39,6 +39,12 @@ task login {
     }
 }
 
+
+task setregisty(type: NpmTask, dependsOn: [npmInstall] ) {
+	args = ['config', 'set', 'registry', _verdaccioURL]
+}
+
+
 task publish(type: NpmTask, dependsOn: [npmInstall, login] ) {
 	args = ['publish', '--registry', _verdaccioURL, '--force']
 }

@@ -35,3 +35,6 @@ gradle.properties
 .gradletasknamecache
 .gradle/
 build/
+
+#Dependencies
+node_modules
